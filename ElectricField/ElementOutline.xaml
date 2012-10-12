@@ -1,0 +1,26 @@
+﻿<Window x:Class="ElectricField.ElementOutline"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Element Outline" Height="240" Width="225" WindowStyle="ToolWindow" ResizeMode="CanResizeWithGrip" MinWidth="225" MinHeight="210" Name="ElementOutlineWindow" Closing="ElementOutlineWindowClosing" ShowInTaskbar="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <ListBox Margin="0,31,0,0" Name="lstBoxData" MouseDoubleClick="LstBoxDataMouseDoubleClick">
+            <ListBoxItem Content="Charge 1" />
+            <ListBoxItem Content="Charge 2" />
+            <ListBoxItem Content="Charge 3" />
+        </ListBox>
+        <Button Content="refresh" Height="23" Name="btnUpdate" VerticalAlignment="Top" Click="BtnUpdateClick" Margin="0,3,0,0" />
+    </Grid>
+</Window>

@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="ElectricField.Controls.FieldVector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="26" d:DesignWidth="23" MouseEnter="UserControlMouseEnter">
+    <UserControl.ToolTip>
+        <ToolTip Name="fieldtooltip">
+
+        </ToolTip>
+    </UserControl.ToolTip>
+    <Grid>
+        <Path x:Name="VecPath" Canvas.Left="-0.049665" Canvas.Top="0" Fill="Black"  Stretch="Fill" Data="F1 M 21.0656,0.0246582C 20.9797,0.0142822 20.8964,0 20.8103,0C 20.7194,0 20.6308,0.015625 20.541,0.0273438C 20.455,0.0377197 20.3702,0.0455933 20.2858,0.0690918C 20.2011,0.0924072 20.1216,0.130249 20.0396,0.164001C 19.9731,0.191284 19.903,0.205688 19.7363,0.302124L 0.88855,12.1967C -0.0516357,12.7891 -0.331421,14.0312 0.260925,14.97C 0.853271,15.9102 2.09564,16.1901 3.03308,15.5964L 3.03308,15.5976L 18.7961,5.64972L 18.7975,9.07678L 18.7975,39.1738C 18.7975,40.2832 19.6972,41.1843 20.8079,41.1843C 21.2869,41.1843 21.7194,41.0097 22.0656,40.7311C 22.5226,40.3627 22.8207,39.8053 22.8207,39.1725L 22.8196,7.25385L 22.8196,5.64838L 38.5825,15.5976C 39.5226,16.1913 40.7623,15.9102 41.356,14.97C 41.5669,14.6367 41.6658,14.2656 41.6658,13.8984C 41.6658,13.2317 41.3352,12.5781 40.7284,12.1953L 40.7284,12.1979L 21.7792,0.240906C 21.7141,0.205688 21.6423,0.190125 21.5735,0.161438C 21.494,0.128906 21.4158,0.0924072 21.3339,0.0690918C 21.2453,0.0442505 21.1555,0.0377197 21.0656,0.0246582 Z " RenderTransformOrigin="0.5,0.5" Margin="1">
+            <Path.LayoutTransform>
+                <RotateTransform Angle="0"></RotateTransform>
+            </Path.LayoutTransform>
+        </Path>
+    </Grid>
+</UserControl>

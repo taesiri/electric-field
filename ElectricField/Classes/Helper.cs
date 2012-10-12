@@ -1,0 +1,231 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Media;
+
+namespace ElectricField.Classes
+{
+    public class Helper
+    {
+        public static Vector NormalizeVector(Vector myVec)
+        {
+            return new Vector(myVec.X/(VectorMagnitude(myVec)), myVec.Y/(VectorMagnitude(myVec)));
+        }
+
+        public static double VectorMagnitude(Vector myvec)
+        {
+            return Math.Sqrt((myvec.X*myvec.X) + (myvec.Y*myvec.Y));
+        }
+
+        public static Vector ReverseVector(Vector myvec)
+        {
+            return new Vector(myvec.Y, myvec.X);
+        }
+
+        public static Vector InverseVector(Vector myvec)
+        {
+            return new Vector(-myvec.X, -myvec.Y);
+        }
+
+        public static double Distance(Point point1, Point point2)
+        {
+            var DisX = Math.Abs(point1.X - point2.X);
+            var DisY = Math.Abs(point1.Y - point2.Y);
+
+            return Math.Sqrt((DisX*DisX) + (DisY*DisY));
+        }
+
+        public static double RadianToDegree(double angle)
+        {
+            return angle*(180.0/Math.PI);
+        }
+
+        public static double Clamp(double val, int min, int max)
+        {
+            if (val < min)
+                return min;
+            else if (val > max)
+                return max;
+            else
+            {
+                return val;
+            }
+        }
+
+        public static double InvertClamp(double val, int min, int max)
+        {
+            if (val < min)
+                return max;
+            else if (val > max)
+                return min;
+            else
+            {
+                return val;
+            }
+        }
+
+        public static bool IsInBetween(double number, int min, int max)
+        {
+            if ((int) number >= min && (int) number <= max)
+                return true;
+            return false;
+        }
+
+        public static int RandomNumber(int min, int max)
+        {
+            var random = new Random();
+            return random.Next(min, max);
+        }
+
+        public static double AmountOForce(int electricCharge, double distance)
+        {
+            return ((9*electricCharge)/(distance*distance));
+        }
+        public static double AmountOForce(double electricCharge, double distance)
+        {
+            return ((9 * electricCharge) / (distance * distance));
+        }
+
+        public static int GetMin(double[] data)
+        {
+            double minimume = data[0];
+            foreach (var t in data)
+            {
+                if (t < minimume && t > 0)
+                    minimume = t;
+            }
+            return (int) minimume;
+        }
+
+        public static int GetMax(double[] data)
+        {
+            double maximume = data[0];
+            maximume = data.Concat(new[] {maximume}).Max();
+            return (int) maximume;
+        }
+
+        public static int[] Integerizer(double[] data)
+        {
+            var newdata = new int[data.Length];
+            for (var i = 0; i < data.Length; i++)
+            {
+                newdata[i] = (int) data[i];
+            }
+
+            return newdata;
+        }
+
+        public static int[] Sort(int[] data)
+        {
+            Array.Sort(data);
+            return data;
+        }
+
+        public static int Mode(double[] data)
+        {
+            var newdata = Sort(Integerizer(data));
+
+            int mode = 0;
+            int modeRepeats = 0;
+
+            for (var i = 0; i < newdata.Length; i++)
+            {
+                var currentmode = newdata[i];
+                var currentmodeRepeats = 1;
+                for (var j = i + 1; j < newdata.Length; j++)
+                {
+                    if (currentmode == newdata[j])
+                        currentmodeRepeats++;
+                    else
+                        break;
+                }
+
+                if (currentmodeRepeats > modeRepeats)
+                {
+                    mode = currentmode;
+                    modeRepeats = currentmodeRepeats;
+                }
+                i += currentmodeRepeats - 1;
+            }
+
+            return mode;
+        }
+
+        public static bool Thresholder(int fvalue, double svalue, int threshold)
+        {
+            return Math.Abs(((int) svalue) - fvalue) <= threshold;
+        }
+
+        public static Color GetCurrentColor(double percent, Color aColor, Color bColor)
+        {
+            if (percent > 1)
+            {
+                throw new InvalidDataException("Holy Shit!");
+            }
+
+            var cr = (byte) ((percent*aColor.R) + ((1 - percent)*bColor.R));
+            var cg = (byte) ((percent*aColor.G) + ((1 - percent)*bColor.G));
+            var cb = (byte) ((percent*aColor.B) + ((1 - percent)*bColor.B));
+            return Color.FromRgb(cr, cg, cb);
+        }
+
+        public static IEnumerable<Point> CalculateVelocity(IEnumerable<Point> data)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException();
+
+            }
+
+            var velocityList = new List<Point>();
+
+            for (int i = 0; i < data.Count() - 1; i++)
+            {
+                var currentValue = (data.ToArray()[i].Y);
+                var nextValue = (data.ToArray()[i + 1].Y);
+
+                var deltaTime = (data.ToArray()[i + 1].X - data.ToArray()[i].X);
+
+
+                var velocity = (nextValue - currentValue)/deltaTime;
+                var time = data.ToArray()[i].X;
+
+                velocityList.Add(new Point(time, velocity));
+            }
+
+            return velocityList;
+
+
+        }
+
+        public static IEquatable<Point> CalculateAcceleration(IEquatable<Point> data)
+        {
+
+            return null;
+        }
+        public class Area
+        {
+            public Area()
+            {
+                Height = 1;
+                Width = 1;
+            }
+
+            public Area(int height, int width)
+            {
+                Height = height;
+                Width = width;
+            }
+
+            public int Height { get; set; }
+            public int Width { get; set; }
+
+            public int GetArea()
+            {
+                return Height*Width;
+            }
+        }
+    }
+}

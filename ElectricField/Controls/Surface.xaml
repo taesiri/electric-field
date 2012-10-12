@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="ElectricField.Controls.Surface"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="32" d:DesignWidth="200" Background="#FF001469" BorderBrush="White" BorderThickness="1">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Settings" Click="ShowSettingsClick" />
+            <Separator/>
+            <MenuItem Header="Is Disabled" IsCheckable="True" Checked="MnuItemDisableChecked" Unchecked="MnuItemDisableUnChecked" />
+            <MenuItem Header="Delete" Click="DeleteChargeClick"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    <Grid></Grid>
+</UserControl>
