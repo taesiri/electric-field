@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ElectricField.Classes;
 using ElectricField.Graph;
 using ElectricField.SettingsPages;
@@ -20,14 +11,11 @@ namespace ElectricField.Controls
     /// <summary>
     /// Interaction logic for FreeCharge.xaml
     /// </summary>
-    public partial class FreeCharge 
+    public partial class FreeCharge
     {
-        public Point StartPoint { get; set; }
-        public Vector LastVector { get; set; }
-        public List<PointStatistics> VisitedPoints; 
-
         public Charge MyCharge;
-        
+        public List<PointStatistics> VisitedPoints;
+
         private Point _previousLocation;
         private Transform _previousTransform;
 
@@ -36,17 +24,22 @@ namespace ElectricField.Controls
             InitializeComponent();
             VisitedPoints = new List<PointStatistics>();
         }
+
+        public Point StartPoint { get; set; }
+        public Vector LastVector { get; set; }
+
         public void Restart()
         {
-            this.Margin = new Thickness(StartPoint.X, StartPoint.Y, 0, 0);
+            Margin = new Thickness(StartPoint.X, StartPoint.Y, 0, 0);
         }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             Window wnd = Window.GetWindow(this);
             Point currentLocation = e.MouseDevice.GetPosition(wnd);
 
             var move = new TranslateTransform(
-                    currentLocation.X - _previousLocation.X, currentLocation.Y - _previousLocation.Y);
+                currentLocation.X - _previousLocation.X, currentLocation.Y - _previousLocation.Y);
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -57,17 +50,15 @@ namespace ElectricField.Controls
                 }
                 group.Children.Add(move);
 
-                this.RenderTransform = group;
-
-
+                RenderTransform = group;
             }
             else
             {
-                this.Cursor = Cursors.Hand;
+                Cursor = Cursors.Hand;
             }
 
             _previousLocation = currentLocation;
-            _previousTransform = this.RenderTransform;
+            _previousTransform = RenderTransform;
 
 
             MainWindow.Instance.CalculatePositions();
@@ -81,13 +72,12 @@ namespace ElectricField.Controls
             var mychart = new DataChart(VisitedPoints, "Position/Time Chart", "", "Position", "Time");
 
             mychart.ShowDialog();
-
         }
+
         public void ShowSettings()
         {
             var settingpage = new FreeChargeSettings(this);
             settingpage.ShowDialog();
         }
-
     }
 }

@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ElectricField.Controls;
 
 namespace ElectricField
@@ -27,27 +19,27 @@ namespace ElectricField
         public void Update()
         {
             Clear();
-            var allitems = MainWindow.Instance.GetListOfItems();
-            foreach (var chargeitem in allitems)
+            IEnumerable<UIElement> allitems = MainWindow.Instance.GetListOfItems();
+            foreach (UIElement chargeitem in allitems)
             {
                 if (chargeitem.GetType() == typeof (PositiveCharge))
                 {
-                    var name = ((PositiveCharge) chargeitem).MyCharge.Name;
+                    string name = ((PositiveCharge) chargeitem).MyCharge.Name;
                     lstBoxData.Items.Add(name);
                 }
                 else if (chargeitem.GetType() == typeof (NegativeCharge))
                 {
-                    var name = ((NegativeCharge) chargeitem).MyCharge.Name;
+                    string name = ((NegativeCharge) chargeitem).MyCharge.Name;
                     lstBoxData.Items.Add(name);
                 }
                 else if (chargeitem.GetType() == typeof (FreeCharge))
                 {
-                    var name = ((FreeCharge) chargeitem).MyCharge.Name;
+                    string name = ((FreeCharge) chargeitem).MyCharge.Name;
                     lstBoxData.Items.Add(name);
                 }
                 else if (chargeitem.GetType() == typeof (Surface))
                 {
-                    var name = ((Surface) chargeitem).MyCharge.Name;
+                    string name = ((Surface) chargeitem).MyCharge.Name;
                     lstBoxData.Items.Add(name);
                 }
             }
@@ -67,9 +59,9 @@ namespace ElectricField
         {
             if (lstBoxData.SelectedItem == null)
                 return;
-            
-            var allitems = MainWindow.Instance.GetListOfItems();
-            foreach (var chargeitem in allitems)
+
+            IEnumerable<UIElement> allitems = MainWindow.Instance.GetListOfItems();
+            foreach (UIElement chargeitem in allitems)
             {
                 string name = "";
                 if (chargeitem.GetType() == typeof (PositiveCharge))
@@ -92,34 +84,33 @@ namespace ElectricField
                         ((NegativeCharge) chargeitem).ShowSettings();
                     }
                 }
-                else if (chargeitem.GetType() == typeof(FreeCharge))
+                else if (chargeitem.GetType() == typeof (FreeCharge))
                 {
                     if (lstBoxData.SelectedItem == null)
                         return;
-                    name = ((FreeCharge)chargeitem).MyCharge.Name;
+                    name = ((FreeCharge) chargeitem).MyCharge.Name;
                     if (name == lstBoxData.SelectedItem.ToString())
                     {
-                        ((FreeCharge)chargeitem).ShowSettings();
+                        ((FreeCharge) chargeitem).ShowSettings();
                     }
                 }
-                else if (chargeitem.GetType() == typeof(Surface))
+                else if (chargeitem.GetType() == typeof (Surface))
                 {
                     if (lstBoxData.SelectedItem == null)
                         return;
-                    name = ((Surface)chargeitem).MyCharge.Name;
+                    name = ((Surface) chargeitem).MyCharge.Name;
                     if (name == lstBoxData.SelectedItem.ToString())
                     {
-                        ((Surface)chargeitem).ShowSettings();
+                        ((Surface) chargeitem).ShowSettings();
                     }
                 }
             }
         }
 
-        private void ElementOutlineWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ElementOutlineWindowClosing(object sender, CancelEventArgs e)
         {
             e.Cancel = true;
-            this.Visibility = Visibility.Hidden;
+            Visibility = Visibility.Hidden;
         }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="ElectricField.SolverOutput"
+﻿<Window x:Class="ElectricField.SolverClasses.SolverOutput"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Output" Height="710" Width="940" Name="OutputWindow" ResizeMode="NoResize" WindowStyle="ThreeDBorderWindow" WindowStartupLocation="CenterScreen">

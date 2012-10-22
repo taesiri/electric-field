@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ElectricField.Classes;
 
 namespace ElectricField.SettingsPages
@@ -32,8 +22,6 @@ namespace ElectricField.SettingsPages
 
             intUDHeight.Value = chargeDensity.BodySurface.Height;
             intUDWidth.Value = chargeDensity.BodySurface.Width;
-
-
         }
 
         private void BtnSaveClick(object sender, RoutedEventArgs e)
@@ -64,7 +52,6 @@ namespace ElectricField.SettingsPages
                 ChrDensity.ElectricCharge = (double) doubleUDCharge.Value;
                 doubleUDDensity.Value = ChrDensity.Density;
             }
-
         }
 
         private void CmboxChargeTypeSelectionChanged(object sender, SelectionChangedEventArgs e)

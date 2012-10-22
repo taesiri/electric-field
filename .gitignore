@@ -1,4 +1,5 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 obj
+_ReSharper.ElectricField
 # mstest test results
 TestResults

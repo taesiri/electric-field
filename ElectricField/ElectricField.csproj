@@ -71,12 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="About.xaml.cs">
-      <DependentUpon>About.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Classes\ChargeDensity.cs" />
-    <Compile Include="Classes\Class1.cs" />
-    <Compile Include="Classes\DoublePoint.cs" />
     <Compile Include="FieldMeterWindow.xaml.cs">
       <DependentUpon>FieldMeterWindow.xaml</DependentUpon>
     </Compile>
@@ -127,10 +122,9 @@
     <Compile Include="SolverClasses\SolverOutput.xaml.cs">
       <DependentUpon>SolverOutput.xaml</DependentUpon>
     </Compile>
-    <Page Include="About.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="SolverClasses\CustomSolverDialog.xaml.cs">
+      <DependentUpon>CustomSolverDialog.xaml</DependentUpon>
+    </Compile>
     <Page Include="FieldMeterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -241,6 +235,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SolverClasses\SolverOutput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SolverClasses\CustomSolverDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

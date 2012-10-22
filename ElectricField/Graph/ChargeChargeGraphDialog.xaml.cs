@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ElectricField.Classes;
 using ElectricField.Controls;
 using ElectricField.SolverClasses;
@@ -23,11 +16,11 @@ namespace ElectricField.Graph
     /// </summary>
     public partial class ChargeChargeGraphDialog
     {
-        private readonly IEnumerable<UIElement> _data;
-        private readonly List<Charge> _charges;
-        private readonly List<Surface> _surfaces;
         private const int ImageHieght = 628;
         private const int ImageWidth = 776;
+        private readonly List<Charge> _charges;
+        private readonly IEnumerable<UIElement> _data;
+        private readonly List<Surface> _surfaces;
 
 
         public ChargeChargeGraphDialog(List<Charge> charges, List<Surface> surfaces)
@@ -62,12 +55,12 @@ namespace ElectricField.Graph
             PositiveCharge positiveCharge = null;
             NegativeCharge negativeCharge = null;
 
-            var allitems = MainWindow.Instance.GetListOfItems();
-            foreach (var chargeitem in allitems)
+            IEnumerable<UIElement> allitems = MainWindow.Instance.GetListOfItems();
+            foreach (UIElement chargeitem in allitems)
             {
                 if (chargeitem.GetType() == typeof (FreeCharge))
                 {
-                    var name = ((FreeCharge) chargeitem).MyCharge.Name;
+                    string name = ((FreeCharge) chargeitem).MyCharge.Name;
                     if ((string) cmbFloat.SelectedValue == name)
                     {
                         freeCharge = ((FreeCharge) chargeitem);
@@ -75,7 +68,7 @@ namespace ElectricField.Graph
                 }
                 else if (chargeitem.GetType() == typeof (PositiveCharge))
                 {
-                    var name = ((PositiveCharge) chargeitem).MyCharge.Name;
+                    string name = ((PositiveCharge) chargeitem).MyCharge.Name;
                     if ((string) cmbStatic.SelectedValue == name)
                     {
                         positiveCharge = ((PositiveCharge) chargeitem);
@@ -83,7 +76,7 @@ namespace ElectricField.Graph
                 }
                 else if (chargeitem.GetType() == typeof (NegativeCharge))
                 {
-                    var name = ((NegativeCharge) chargeitem).MyCharge.Name;
+                    string name = ((NegativeCharge) chargeitem).MyCharge.Name;
                     if ((string) cmbStatic.SelectedValue == name)
                     {
                         negativeCharge = ((NegativeCharge) chargeitem);
@@ -94,18 +87,16 @@ namespace ElectricField.Graph
 
             if (freeCharge != null)
             {
-                Point Orgins = new Point();
+                var Orgins = new Point();
                 if (positiveCharge != null)
                 {
                     Orgins = new Point(positiveCharge.RenderTransform.Value.OffsetX,
                                        positiveCharge.RenderTransform.Value.OffsetY);
-
                 }
                 else if (negativeCharge != null)
                 {
                     Orgins = new Point(negativeCharge.RenderTransform.Value.OffsetX,
                                        negativeCharge.RenderTransform.Value.OffsetY);
-
                 }
 
                 var returnedData = (List<Point>) slver.ChargeChargeDistance(freeCharge, Orgins, duration, startloc);
@@ -115,20 +106,16 @@ namespace ElectricField.Graph
 
                 if (returnedData != null)
                 {
-                    var velcocity = Helper.CalculateVelocity(returnedData);
+                    IEnumerable<Point> velcocity = Helper.CalculateVelocity(returnedData);
                     graphOutput.DrawThis(velcocity, Brushes.DodgerBlue, Brushes.LightSkyBlue, "Velocity");
-
                 }
 
 
-
                 graphOutput.Show();
-
             }
 
 
             Close();
-
         }
 
         private void MetroWindowLoaded(object sender, RoutedEventArgs e)
@@ -138,36 +125,34 @@ namespace ElectricField.Graph
             if (_data == null)
             {
                 MessageBox.Show("You haven't Anything in the field!");
-                this.Close();
+                Close();
             }
             Debug.Assert(_data != null, "data != null");
-            foreach (var uiElement in _data)
+            foreach (UIElement uiElement in _data)
             {
                 if (uiElement.GetType() == typeof (FreeCharge))
                 {
-                    var name = ((FreeCharge) uiElement).MyCharge.Name;
+                    string name = ((FreeCharge) uiElement).MyCharge.Name;
                     cmbFloat.Items.Add(name);
                 }
                 else if (uiElement.GetType() == typeof (PositiveCharge))
                 {
-                    var name = ((PositiveCharge) uiElement).MyCharge.Name;
+                    string name = ((PositiveCharge) uiElement).MyCharge.Name;
                     cmbStatic.Items.Add(name);
                 }
                 else if (uiElement.GetType() == typeof (NegativeCharge))
                 {
-                    var name = ((NegativeCharge) uiElement).MyCharge.Name;
+                    string name = ((NegativeCharge) uiElement).MyCharge.Name;
                     cmbStatic.Items.Add(name);
                 }
             }
 
             integerUDDuration.Value = 10;
-
-
         }
 
         private void CmbFloatSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (var chargeitem in _data)
+            foreach (UIElement chargeitem in _data)
             {
                 if (chargeitem.GetType() == typeof (FreeCharge))
                 {
@@ -179,7 +164,6 @@ namespace ElectricField.Graph
                     }
                 }
             }
-
         }
 
         private void BtnCloseClick(object sender, RoutedEventArgs e)

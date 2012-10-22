@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using ElectricField.SolverClasses;
 
 namespace ElectricField.Classes
 {
@@ -31,8 +32,8 @@ namespace ElectricField.Classes
 
         public static double Distance(Point point1, Point point2)
         {
-            var DisX = Math.Abs(point1.X - point2.X);
-            var DisY = Math.Abs(point1.Y - point2.Y);
+            double DisX = Math.Abs(point1.X - point2.X);
+            double DisY = Math.Abs(point1.Y - point2.Y);
 
             return Math.Sqrt((DisX*DisX) + (DisY*DisY));
         }
@@ -83,15 +84,16 @@ namespace ElectricField.Classes
         {
             return ((9*electricCharge)/(distance*distance));
         }
+
         public static double AmountOForce(double electricCharge, double distance)
         {
-            return ((9 * electricCharge) / (distance * distance));
+            return ((9*electricCharge)/(distance*distance));
         }
 
         public static int GetMin(double[] data)
         {
             double minimume = data[0];
-            foreach (var t in data)
+            foreach (double t in data)
             {
                 if (t < minimume && t > 0)
                     minimume = t;
@@ -109,7 +111,7 @@ namespace ElectricField.Classes
         public static int[] Integerizer(double[] data)
         {
             var newdata = new int[data.Length];
-            for (var i = 0; i < data.Length; i++)
+            for (int i = 0; i < data.Length; i++)
             {
                 newdata[i] = (int) data[i];
             }
@@ -125,16 +127,16 @@ namespace ElectricField.Classes
 
         public static int Mode(double[] data)
         {
-            var newdata = Sort(Integerizer(data));
+            int[] newdata = Sort(Integerizer(data));
 
             int mode = 0;
             int modeRepeats = 0;
 
-            for (var i = 0; i < newdata.Length; i++)
+            for (int i = 0; i < newdata.Length; i++)
             {
-                var currentmode = newdata[i];
-                var currentmodeRepeats = 1;
-                for (var j = i + 1; j < newdata.Length; j++)
+                int currentmode = newdata[i];
+                int currentmodeRepeats = 1;
+                for (int j = i + 1; j < newdata.Length; j++)
                 {
                     if (currentmode == newdata[j])
                         currentmodeRepeats++;
@@ -176,35 +178,83 @@ namespace ElectricField.Classes
             if (data == null)
             {
                 throw new ArgumentNullException();
-
             }
 
             var velocityList = new List<Point>();
 
             for (int i = 0; i < data.Count() - 1; i++)
             {
-                var currentValue = (data.ToArray()[i].Y);
-                var nextValue = (data.ToArray()[i + 1].Y);
+                double currentValue = (data.ToArray()[i].Y);
+                double nextValue = (data.ToArray()[i + 1].Y);
 
-                var deltaTime = (data.ToArray()[i + 1].X - data.ToArray()[i].X);
+                double deltaTime = (data.ToArray()[i + 1].X - data.ToArray()[i].X);
 
 
-                var velocity = (nextValue - currentValue)/deltaTime;
-                var time = data.ToArray()[i].X;
+                double velocity = (nextValue - currentValue)/deltaTime;
+                double time = data.ToArray()[i].X;
 
                 velocityList.Add(new Point(time, velocity));
             }
 
             return velocityList;
+        }
 
+        public static LinearGradientBrush ConvertToBrush(List<Solver.Colorizer> data)
+        {
+            var returnBrush = new LinearGradientBrush();
+            float counter = 1f;
+            foreach (Solver.Colorizer colorizer in data)
+            {
+                returnBrush.GradientStops.Add(new GradientStop(colorizer.Color, (counter/data.Count)));
 
+                counter++;
+            }
+
+            return returnBrush;
+        }
+
+        public static Solver.Colorizer GetNextColor(List<Solver.Colorizer> listOfColors, Solver.Colorizer afterThis)
+        {
+            Solver.Colorizer returnValue = afterThis;
+
+            foreach (Solver.Colorizer colorizer in listOfColors)
+            {
+                if (IsInBetween(afterThis.Max + 1, colorizer.Min, colorizer.Max))
+                {
+                    returnValue = colorizer;
+                }
+            }
+            return returnValue;
+        }
+
+        public static Solver.Colorizer GetPrevColor(List<Solver.Colorizer> listOfColors, Solver.Colorizer afterThis)
+        {
+            Solver.Colorizer returnValue = afterThis;
+
+            foreach (Solver.Colorizer colorizer in listOfColors)
+            {
+                if (IsInBetween(afterThis.Min - 1, colorizer.Min, colorizer.Max))
+                {
+                    returnValue = colorizer;
+                }
+            }
+            return returnValue;
+        }
+
+        public static Solver.Colorizer ConvertToColorizer(Solver.ColorRange data)
+        {
+            var returnItem = new Solver.Colorizer {Min = (int) data.Min, Max = (int) data.Max, Color = data.Color};
+
+            return returnItem;
         }
 
         public static IEquatable<Point> CalculateAcceleration(IEquatable<Point> data)
         {
-
             return null;
         }
+
+        #region Nested type: Area
+
         public class Area
         {
             public Area()
@@ -227,5 +277,7 @@ namespace ElectricField.Classes
                 return Height*Width;
             }
         }
+
+        #endregion
     }
 }

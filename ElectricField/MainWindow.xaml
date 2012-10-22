@@ -41,9 +41,6 @@
                 <MenuItem Header="Field Outline" Click="MnuItemFieldOutlineClick" Name="mnuItemFieldOutline" IsCheckable="False" />
                 <MenuItem Header="Force at Desired Position" Click="MnuItemForeAtDesiredPositionClick"  />
             </MenuItem>
-            <MenuItem Header="Help">
-                <MenuItem Header="About" Click="MnuItemAboutClick"/>
-            </MenuItem>
         </Menu>
         <Button Content="Add Positive Charge" Margin="12,29,0,0" Cursor="Hand" HorizontalAlignment="Left" Width="130" Height="30" VerticalAlignment="Top" Name="btnAddPositivechg" Click="AddPositive" Foreground="White" BorderBrush="White">
             <Button.Template>
@@ -82,7 +79,7 @@
         <Border  Height="628" HorizontalAlignment="Left" Margin="12,72,0,0" VerticalAlignment="Top" Width="776" BorderBrush="#FF414141" BorderThickness="1">
             <Grid Height="628" Name="gridField" Width="776" Background="Black"></Grid>
         </Border>
-        <Button Content="Quick Solve" Cursor="Hand" Height="30" HorizontalAlignment="Right" Margin="0,715,12,0" Name="button1" VerticalAlignment="Top" Width="127" Click="BtnQuickSolveClick">
+        <Button Content="Solve it!" Cursor="Hand" Height="30" HorizontalAlignment="Right" Margin="0,715,12,0" Name="btnSolveit" VerticalAlignment="Top" Width="127" Click="BtnQuickSolveClick">
             <Button.Template>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Background="#FFE2E2E2" CornerRadius="4" Name="Border">
@@ -183,6 +180,25 @@
                         </Trigger>
                         <Trigger Property="ButtonBase.IsPressed" Value="True">
                             <Setter Property="Border.Background" TargetName="Border" Value="DarkBlue" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Content="Quick Draw Field Lines" Cursor="Hand" Height="30" HorizontalAlignment="Right" Margin="0,715,288,0" Name="btnQuickDrawFieldLines" VerticalAlignment="Top" Width="161" Click="BtnQuckDrawFieldLinesClick">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="DarkGoldenrod" CornerRadius="4" Name="Border">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                            <Setter Property="Border.Background" TargetName="Border" Value="DarkRed" />
+                            <Setter Property="Control.Foreground" Value="White" />
+                        </Trigger>
+                        <Trigger Property="ButtonBase.IsPressed" Value="True">
+                            <Setter Property="Border.Background" TargetName="Border" Value="Red" />
+                            <Setter Property="Control.Foreground" Value="White" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

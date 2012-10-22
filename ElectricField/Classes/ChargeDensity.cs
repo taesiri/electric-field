@@ -1,5 +1,3 @@
-using System.Windows;
-
 namespace ElectricField.Classes
 {
     public class ChargeDensity
@@ -7,9 +5,30 @@ namespace ElectricField.Classes
         public string Name;
         public Charge.ChargeType Type;
 
-        private double _electricCharge;
-        private double _density;
         private Helper.Area _bodySurface;
+        private double _density;
+        private double _electricCharge;
+
+        public ChargeDensity()
+        {
+            Name = "New Surface";
+            Type = Charge.ChargeType.Positive;
+            _density = 1;
+            _electricCharge = 1;
+            _bodySurface = new Helper.Area();
+            IsActive = true;
+        }
+
+        public ChargeDensity(ChargeDensity chargeDensity)
+        {
+            Name = chargeDensity.Name;
+            Type = chargeDensity.Type;
+            _density = chargeDensity.Density;
+            _electricCharge = chargeDensity.ElectricCharge;
+
+            _bodySurface = new Helper.Area(chargeDensity.BodySurface.Height, chargeDensity.BodySurface.Width);
+            IsActive = chargeDensity.IsActive;
+        }
 
         public double ElectricCharge
         {
@@ -42,26 +61,5 @@ namespace ElectricField.Classes
         }
 
         public bool IsActive { get; set; }
-
-        public ChargeDensity()
-        {
-            Name = "New Surface";
-            Type = Charge.ChargeType.Positive;
-            _density = 1;
-            _electricCharge = 1;
-            _bodySurface = new Helper.Area();
-            IsActive = true;
-        }
-
-        public ChargeDensity(ChargeDensity chargeDensity)
-        {
-            Name = chargeDensity.Name;
-            Type = chargeDensity.Type;
-            _density = chargeDensity.Density;
-            _electricCharge = chargeDensity.ElectricCharge;
-
-            _bodySurface = new Helper.Area(chargeDensity.BodySurface.Height, chargeDensity.BodySurface.Width);
-            IsActive = chargeDensity.IsActive;
-        }
     }
 }

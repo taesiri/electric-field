@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ElectricField.Classes;
 using ElectricField.SettingsPages;
 
@@ -50,15 +40,15 @@ namespace ElectricField.Controls
                 }
                 group.Children.Add(move);
 
-                this.RenderTransform = group;
+                RenderTransform = group;
             }
             else
             {
-                this.Cursor = Cursors.Hand;
+                Cursor = Cursors.Hand;
             }
 
             _previousLocation = currentLocation;
-            _previousTransform = this.RenderTransform;
+            _previousTransform = RenderTransform;
 
 
             MainWindow.Instance.CalculatePositions();
@@ -68,10 +58,10 @@ namespace ElectricField.Controls
         public void ShowSettings()
         {
             var setting = new SurfaceSettings(MyCharge);
-            Nullable<bool> result = setting.ShowDialog();
+            bool? result = setting.ShowDialog();
             if (result == true)
             {
-                this.MyCharge = new ChargeDensity(setting.ChrDensity);
+                MyCharge = new ChargeDensity(setting.ChrDensity);
                 MainWindow.Instance.Calculation();
                 CheckColor();
             }
@@ -81,31 +71,30 @@ namespace ElectricField.Controls
         {
             if (MyCharge.Type == Charge.ChargeType.Positive)
             {
-                this.Background = Brushes.DarkRed;
+                Background = Brushes.DarkRed;
             }
             else
             {
-                this.Background = Brushes.DodgerBlue;
+                Background = Brushes.DodgerBlue;
             }
 
             if ((int) MyCharge.ElectricCharge == 0 || MyCharge.IsActive == false)
             {
-                this.Background = Brushes.DarkGray;
+                Background = Brushes.DarkGray;
             }
         }
 
         private void DisableCharge()
         {
-            this.MyCharge.IsActive = false;
+            MyCharge.IsActive = false;
             //txtChargeLable.Text = ".";
             CheckColor();
             MainWindow.Instance.Calculation();
-
         }
 
         private void EnableCharge()
         {
-            this.MyCharge.IsActive = true;
+            MyCharge.IsActive = true;
             //txtChargeLable.Text = "-";
             CheckColor();
             MainWindow.Instance.Calculation();
@@ -113,7 +102,7 @@ namespace ElectricField.Controls
 
         private void EliminateCharge()
         {
-            MainWindow.Instance.RemoveExistingCharge(this.MyCharge, this);
+            MainWindow.Instance.RemoveExistingCharge(MyCharge, this);
         }
 
         private void ShowSettingsClick(object sender, RoutedEventArgs e)
@@ -135,6 +124,5 @@ namespace ElectricField.Controls
         {
             EnableCharge();
         }
-
     }
 }

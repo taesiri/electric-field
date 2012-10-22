@@ -1,12 +1,11 @@
-﻿using System.Windows;
-using ElectricField.Controls;
+﻿using ElectricField.Controls;
 
 namespace ElectricField.SettingsPages
 {
     /// <summary>
     /// Interaction logic for FreeChargeSettings.xaml
     /// </summary>
-    public partial class FreeChargeSettings : Window
+    public partial class FreeChargeSettings 
     {
         public FreeChargeSettings(FreeCharge charge)
         {

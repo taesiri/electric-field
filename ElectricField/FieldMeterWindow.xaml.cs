@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ElectricField.Classes;
 
 namespace ElectricField
@@ -21,7 +12,7 @@ namespace ElectricField
     /// </summary>
     public partial class FieldMeterWindow : Window
     {
-        private bool _lateUpdate = false;
+        private readonly bool _lateUpdate;
 
         public FieldMeterWindow()
         {
@@ -29,10 +20,10 @@ namespace ElectricField
             _lateUpdate = true;
         }
 
-        private void FieldMeterWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void FieldMeterWindowClosing(object sender, CancelEventArgs e)
         {
             e.Cancel = true;
-            this.Visibility = Visibility.Hidden;
+            Visibility = Visibility.Hidden;
         }
 
         public void Update()
@@ -43,9 +34,9 @@ namespace ElectricField
                 {
                     try
                     {
-                        var forceVec = MainWindow.Instance.GetForceAtDesirePosition(doubleUpDownXPos.Value.Value,
-                                                                                    doubleUpDownYPos.Value.Value,
-                                                                                    0);
+                        Vector forceVec = MainWindow.Instance.GetForceAtDesirePosition(doubleUpDownXPos.Value.Value,
+                                                                                       doubleUpDownYPos.Value.Value,
+                                                                                       0);
 
                         txtForceX.Text = forceVec.X.ToString(CultureInfo.InvariantCulture);
                         txtForceY.Text = forceVec.Y.ToString(CultureInfo.InvariantCulture);
@@ -53,11 +44,8 @@ namespace ElectricField
                     }
                     catch (Exception exp)
                     {
-
                         Debug.WriteLine(exp.Message);
-
                     }
-
                 }
             }
         }
@@ -66,6 +54,5 @@ namespace ElectricField
         {
             Update();
         }
-
     }
 }

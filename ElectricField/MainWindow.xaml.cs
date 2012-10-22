@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -16,25 +18,23 @@ namespace ElectricField
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [System.Runtime.InteropServices.GuidAttribute("A5D5D54B-5879-429A-8359-719CBF0D9550")]
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public static MainWindow Instance;
         private readonly List<Charge> _charges = new List<Charge>();
         private readonly DispatcherTimer _timer = new DispatcherTimer();
-        private bool _isTimerStarted = false;
-        private int _time = 0;
-
-        public ElementOutline FieldOutline = new ElementOutline();
         public FieldMeterWindow FieldMeter = new FieldMeterWindow();
+        public ElementOutline FieldOutline = new ElementOutline();
+        private bool _isTimerStarted;
+        private int _time;
 
         public MainWindow()
         {
             InitializeComponent();
             Instance = this;
-            for (var i = 0; i < 17; i++)
+            for (int i = 0; i < 17; i++)
             {
-                for (var j = 0; j < 14; j++)
+                for (int j = 0; j < 14; j++)
                 {
                     var newfPoint = new FieldVector
                                         {
@@ -47,8 +47,8 @@ namespace ElectricField
                     gridField.Children.Add(newfPoint);
                 }
             }
-            _timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            _timer.Tick += new EventHandler(TimerTick);
+            _timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            _timer.Tick += TimerTick;
 
             CalculatePositions();
             //var x = Window.GetWindow(this).
@@ -69,19 +69,19 @@ namespace ElectricField
 
             //for Charges
             if (_charges != null)
-                foreach (var charge in _charges)
+                foreach (Charge charge in _charges)
                 {
                     if (charge.IsActive)
                     {
-                        var distanceX = xPos - charge.Location.X;
-                        var distanceY = charge.Location.Y - yPos;
+                        double distanceX = xPos - charge.Location.X;
+                        double distanceY = charge.Location.Y - yPos;
 
                         // Calculating Height and Width of Displayed charge Object itself!
                         distanceX -= fault;
                         distanceY += fault;
 
                         var tempVec = new Vector(distanceX, distanceY);
-                        var amountOfDistance = Helper.VectorMagnitude(tempVec)/100;
+                        double amountOfDistance = Helper.VectorMagnitude(tempVec)/100;
 
                         //Consideration!
                         if (charge.Type == Charge.ChargeType.Negative)
@@ -97,7 +97,7 @@ namespace ElectricField
                 }
 
             //for Surfaces
-            foreach (var uiElement in gridField.Children)
+            foreach (object uiElement in gridField.Children)
             {
                 if (uiElement.GetType() == typeof (Surface))
                 {
@@ -106,18 +106,18 @@ namespace ElectricField
                         double amountOfChargePerPoint = ((Surface) uiElement).MyCharge.ElectricCharge/10;
                         var surfaceLocation = new Point(((Surface) uiElement).RenderTransform.Value.OffsetX,
                                                         ((Surface) uiElement).RenderTransform.Value.OffsetY);
-                        var parresh = ((Surface) uiElement).Width/10;
-                        var taVasat = ((Surface) uiElement).Height/2;
+                        double parresh = ((Surface) uiElement).Width/10;
+                        double taVasat = ((Surface) uiElement).Height/2;
 
                         for (int i = 0; i < 10; i++)
                         {
                             var here = new Point(surfaceLocation.X + (i*parresh), surfaceLocation.Y + taVasat);
 
-                            var distanceX = xPos - here.X;
-                            var distanceY = here.Y - yPos;
+                            double distanceX = xPos - here.X;
+                            double distanceY = here.Y - yPos;
 
                             var tempVec = new Vector(distanceX, distanceY);
-                            var amountOfDistance = Helper.VectorMagnitude(tempVec)/100;
+                            double amountOfDistance = Helper.VectorMagnitude(tempVec)/100;
 
                             if (((Surface) uiElement).MyCharge.Type == Charge.ChargeType.Negative)
                             {
@@ -138,21 +138,18 @@ namespace ElectricField
 
         public void Calculation()
         {
-
             if (_charges == null && TotalSurfaces() == 0)
             {
-
             }
             else if (_charges != null && (_charges.Count == 0 && TotalSurfaces() == 0))
             {
-                foreach (var element in gridField.Children)
+                foreach (object element in gridField.Children)
                     if (element.GetType() == typeof (FieldVector))
                         ((FieldVector) element).ForceVector = new Vector(0, 0);
-
             }
             else if (_charges != null && (_charges.Count != 0 || TotalSurfaces() != 0))
             {
-                foreach (var element in gridField.Children)
+                foreach (object element in gridField.Children)
                 {
                     if (element.GetType() == typeof (FieldVector))
                     {
@@ -160,19 +157,19 @@ namespace ElectricField
                         var totalForceVec = new Vector(0, 0);
 
                         //Charges
-                        foreach (var charge in _charges)
+                        foreach (Charge charge in _charges)
                         {
                             if (charge.IsActive)
                             {
-                                var distanceX = ((FieldVector) element).Margin.Left - charge.Location.X;
-                                var distanceY = charge.Location.Y - ((FieldVector) element).Margin.Top;
+                                double distanceX = ((FieldVector) element).Margin.Left - charge.Location.X;
+                                double distanceY = charge.Location.Y - ((FieldVector) element).Margin.Top;
 
                                 // Calculating Height and Width of Displayed charge Object itself!
                                 distanceX -= 12;
                                 distanceY += 12;
 
                                 var tempVec = new Vector(distanceX, distanceY);
-                                var amountOfDistance = Helper.VectorMagnitude(tempVec)/100;
+                                double amountOfDistance = Helper.VectorMagnitude(tempVec)/100;
 
                                 //Consideration!
                                 if (charge.Type == Charge.ChargeType.Negative)
@@ -188,7 +185,7 @@ namespace ElectricField
                             }
                         }
                         //Surfaces
-                        foreach (var uiElement in gridField.Children)
+                        foreach (object uiElement in gridField.Children)
                         {
                             if (uiElement.GetType() == typeof (Surface))
                             {
@@ -197,19 +194,19 @@ namespace ElectricField
                                     double amountOfChargePerPoint = ((Surface) uiElement).MyCharge.ElectricCharge/10;
                                     var surfaceLocation = new Point(((Surface) uiElement).RenderTransform.Value.OffsetX,
                                                                     ((Surface) uiElement).RenderTransform.Value.OffsetY);
-                                    var parresh = ((Surface) uiElement).Width/10;
-                                    var taVasat = ((Surface) uiElement).Height/2;
+                                    double parresh = ((Surface) uiElement).Width/10;
+                                    double taVasat = ((Surface) uiElement).Height/2;
 
                                     for (int i = 0; i < 10; i++)
                                     {
                                         var here = new Point(surfaceLocation.X + (i*parresh),
                                                              surfaceLocation.Y + taVasat);
 
-                                        var distanceX = ((FieldVector) element).Margin.Left - here.X;
-                                        var distanceY = here.Y - ((FieldVector) element).Margin.Top;
+                                        double distanceX = ((FieldVector) element).Margin.Left - here.X;
+                                        double distanceY = here.Y - ((FieldVector) element).Margin.Top;
 
                                         var tempVec = new Vector(distanceX, distanceY);
-                                        var amountOfDistance = Helper.VectorMagnitude(tempVec)/100;
+                                        double amountOfDistance = Helper.VectorMagnitude(tempVec)/100;
 
                                         if (((Surface) uiElement).MyCharge.Type == Charge.ChargeType.Negative)
                                         {
@@ -225,18 +222,15 @@ namespace ElectricField
                         }
 
                         ((FieldVector) element).ForceVector = totalForceVec;
-
                     }
                 }
                 FieldMeter.Update();
-
             }
-            
         }
 
         public void CalculatePositions()
         {
-            foreach (var element in gridField.Children)
+            foreach (object element in gridField.Children)
             {
                 if (element.GetType() == typeof (PositiveCharge))
                 {
@@ -252,9 +246,7 @@ namespace ElectricField
                 }
                 else if (element.GetType() == typeof (Surface))
                 {
-
                 }
-
             }
             Calculation();
         }
@@ -272,7 +264,7 @@ namespace ElectricField
         public int TotalPositives()
         {
             int value = 0;
-            foreach (var element in gridField.Children)
+            foreach (object element in gridField.Children)
             {
                 if (element.GetType() == typeof (PositiveCharge))
                 {
@@ -285,7 +277,7 @@ namespace ElectricField
         public int TotalNegativs()
         {
             int value = 0;
-            foreach (var element in gridField.Children)
+            foreach (object element in gridField.Children)
             {
                 if (element.GetType() == typeof (NegativeCharge))
                 {
@@ -298,7 +290,7 @@ namespace ElectricField
         public int TotalFrees()
         {
             int value = 0;
-            foreach (var element in gridField.Children)
+            foreach (object element in gridField.Children)
             {
                 if (element.GetType() == typeof (FreeCharge))
                 {
@@ -311,7 +303,7 @@ namespace ElectricField
         public int TotalSurfaces()
         {
             int value = 0;
-            foreach (var element in gridField.Children)
+            foreach (object element in gridField.Children)
             {
                 if (element.GetType() == typeof (Surface))
                 {
@@ -393,11 +385,11 @@ namespace ElectricField
         {
             var dialog = new SaveFileDialog {Title = "Choose location ...", Filter = "JPEG Image File (*.jpg)|*.jpg"};
 
-            var surfacelist =
+            List<Surface> surfacelist =
                 gridField.Children.Cast<object>().Where(uiElement => uiElement.GetType() == typeof (Surface)).Cast
                     <Surface>().ToList();
 
-            Nullable<bool> result = dialog.ShowDialog();
+            bool? result = dialog.ShowDialog();
             if (result == true)
             {
                 var slvr = new Solver(_charges, surfacelist, (int) gridField.Height, (int) gridField.Width);
@@ -411,7 +403,7 @@ namespace ElectricField
                         "Do you want to open it now ?", "Write file Completed", MessageBoxButton.YesNo) ==
                     MessageBoxResult.Yes)
                 {
-                    System.Diagnostics.Process.Start(dialog.FileName);
+                    Process.Start(dialog.FileName);
                 }
             }
         }
@@ -420,14 +412,13 @@ namespace ElectricField
         {
             var dialog = new SaveFileDialog {Title = "Choose location ...", Filter = "JPEG Image File (*.jpg)|*.jpg"};
 
-            var surfacelist =
+            List<Surface> surfacelist =
                 gridField.Children.Cast<object>().Where(uiElement => uiElement.GetType() == typeof (Surface)).Cast
                     <Surface>().ToList();
 
-            Nullable<bool> result = dialog.ShowDialog();
+            bool? result = dialog.ShowDialog();
             if (result == true)
             {
-
                 var slvr = new Solver(_charges, surfacelist, (int) gridField.Height, (int) gridField.Width);
 
                 slvr.SolveIt();
@@ -439,7 +430,7 @@ namespace ElectricField
                         "Do you want to open it now ?", "Write file Completed", MessageBoxButton.YesNo) ==
                     MessageBoxResult.Yes)
                 {
-                    System.Diagnostics.Process.Start(dialog.FileName);
+                    Process.Start(dialog.FileName);
                 }
             }
         }
@@ -451,7 +442,7 @@ namespace ElectricField
 
         private bool CheckExistingChargeWithName(string name)
         {
-            foreach (var element in gridField.Children)
+            foreach (object element in gridField.Children)
             {
                 if (element.GetType() == typeof (PositiveCharge))
                 {
@@ -494,7 +485,7 @@ namespace ElectricField
             }
 
             string chargename = "positive-charge " + (TotalPositives() + 1).ToString(CultureInfo.InvariantCulture);
-            var counter = 1;
+            int counter = 1;
             while (CheckExistingChargeWithName(chargename))
             {
                 counter++;
@@ -520,7 +511,7 @@ namespace ElectricField
                 return;
             }
             string chargename = "negative-charge " + (TotalNegativs() + 1).ToString(CultureInfo.InvariantCulture);
-            var counter = 1;
+            int counter = 1;
             while (CheckExistingChargeWithName(chargename))
             {
                 counter++;
@@ -550,7 +541,7 @@ namespace ElectricField
             freecharge.Width = 12;
 
             string chargename = "Free-charge " + (TotalFrees() + 1).ToString(CultureInfo.InvariantCulture);
-            var counter = 1;
+            int counter = 1;
             while (CheckExistingChargeWithName(chargename))
             {
                 counter++;
@@ -572,7 +563,6 @@ namespace ElectricField
             freecharge.RenderTransform = group;
 
             FieldOutline.Update();
-
         }
 
         private void BtnAddSurfaceClick(object sender, RoutedEventArgs e)
@@ -586,7 +576,7 @@ namespace ElectricField
             surface.Width = 200;
 
             string chargename = "Surface" + (TotalSurfaces() + 1).ToString(CultureInfo.InvariantCulture);
-            var counter = 1;
+            int counter = 1;
             while (CheckExistingChargeWithName(chargename))
             {
                 counter++;
@@ -621,24 +611,18 @@ namespace ElectricField
                     <UIElement>().ToList();
         }
 
-        private void MnuItemAboutClick(object sender, RoutedEventArgs e)
-        {
-            var about = new About();
-            about.ShowDialog();
-        }
-
         private void MnuItemRestartClick(object sender, RoutedEventArgs e)
         {
             //_timer
 
             var elems = new List<UIElement>();
-            foreach (var element in gridField.Children)
+            foreach (object element in gridField.Children)
                 if (element.GetType() == typeof (PositiveCharge) || element.GetType() == typeof (NegativeCharge) ||
                     element.GetType() == typeof (DummyPoint) || element.GetType() == typeof (FreeCharge) ||
                     element.GetType() == typeof (Surface))
                     elems.Add((UIElement) element);
 
-            foreach (var uiElement in elems)
+            foreach (UIElement uiElement in elems)
             {
                 gridField.Children.Remove(uiElement);
             }
@@ -657,12 +641,12 @@ namespace ElectricField
 
         private void MnuDummyDeleterClick(object sender, RoutedEventArgs e)
         {
-            List<UIElement> elems = new List<UIElement>();
-            foreach (var element in gridField.Children)
+            var elems = new List<UIElement>();
+            foreach (object element in gridField.Children)
                 if (element.GetType() == typeof (DummyPoint) || element.GetType() == typeof (FreeCharge))
                     elems.Add((UIElement) element);
 
-            foreach (var uiElement in elems)
+            foreach (UIElement uiElement in elems)
             {
                 gridField.Children.Remove(uiElement);
             }
@@ -670,7 +654,6 @@ namespace ElectricField
             _timer.Stop();
             _isTimerStarted = false;
             MnuDeleteDummy.IsEnabled = false;
-
         }
 
         private void MunItemSolverClick(object sender, RoutedEventArgs e)
@@ -681,11 +664,15 @@ namespace ElectricField
             //    return;
             //}
 
-            var surfacelist = gridField.Children.Cast<object>().Where(
+            List<Surface> surfacelist = gridField.Children.Cast<object>().Where(
                 uiElement => uiElement.GetType() == typeof (Surface)).Cast
                 <Surface>().ToList();
 
-            var csolver = new ChargeSolver(0, 100, (int) gridField.Height, (int) gridField.Width, _charges, surfacelist);
+            //var csolver = new ChargeSolver(0, 100, (int) gridField.Height, (int) gridField.Width, _charges, surfacelist);
+            //csolver.ShowDialog();
+
+            var csolver = new CustomSolverDialog(0, 100, (int) gridField.Height, (int) gridField.Width, _charges,
+                                                 surfacelist);
             csolver.ShowDialog();
         }
 
@@ -697,27 +684,78 @@ namespace ElectricField
 
         private void BtnQuickSolveClick(object sender, RoutedEventArgs e)
         {
-            var surfacelist =
+            List<Surface> surfacelist =
                 gridField.Children.Cast<object>().Where(uiElement => uiElement.GetType() == typeof (Surface)).Cast
                     <Surface>().ToList();
             var slvr = new Solver(_charges, surfacelist, (int) gridField.Height, (int) gridField.Width);
 
             slvr.SolveIt();
             var imagebrush = new ImageBrush();
-            imagebrush.ImageSource = slvr.GetImageRgb24();
+            //imagebrush.ImageSource = slvr.GetImageRgb24();
+
+            var ListofColors = new List<Solver.Colorizer>();
+
+            var color00 = new Solver.Colorizer();
+            var color0 = new Solver.Colorizer();
+            var color1 = new Solver.Colorizer();
+            var color2 = new Solver.Colorizer();
+            var color3 = new Solver.Colorizer();
+            var color4 = new Solver.Colorizer();
+            var color5 = new Solver.Colorizer();
+
+
+            color00.Color = Colors.DarkRed;
+            color00.Min = 1001;
+            color00.Max = int.MaxValue;
+
+            color0.Color = Colors.DarkRed;
+            color0.Min = 400;
+            color0.Max = 1000;
+
+            color1.Color = Colors.Red;
+            color1.Min = 100;
+            color1.Max = 399;
+
+            color2.Color = Colors.OrangeRed;
+            color2.Min = 60;
+            color2.Max = 99;
+
+            color3.Color = Colors.Yellow;
+            color3.Min = 30;
+            color3.Max = 59;
+
+            color4.Color = Colors.YellowGreen;
+            color4.Min = 10;
+            color4.Max = 29;
+
+            color5.Color = Colors.Black;
+            color5.Min = 0;
+            color5.Max = 9;
+
+
+            ListofColors.Add(color00);
+            ListofColors.Add(color0);
+            ListofColors.Add(color1);
+            ListofColors.Add(color2);
+            ListofColors.Add(color3);
+            ListofColors.Add(color4);
+            ListofColors.Add(color5);
+
+            ListofColors.Add(new Solver.Colorizer());
+            imagebrush.ImageSource = slvr.CustomeColorizerSolver(ListofColors);
             gridField.Background = imagebrush;
         }
 
         private void BtnDrawFieldLinesClick(object sender, RoutedEventArgs e)
         {
-            var surfacelist =
+            List<Surface> surfacelist =
                 gridField.Children.Cast<object>().Where(uiElement => uiElement.GetType() == typeof (Surface)).Cast
                     <Surface>().ToList();
             var slvr = new Solver(_charges, surfacelist, (int) gridField.Height, (int) gridField.Width);
 
             slvr.SolveIt();
             var imagebrush = new ImageBrush();
-            imagebrush.ImageSource = slvr.GenerateFieldLines();
+            imagebrush.ImageSource = slvr.GenerateFieldLines(false);
             gridField.Background = imagebrush;
         }
 
@@ -727,7 +765,7 @@ namespace ElectricField
             var location1 = new Point((int) freeCharge.RenderTransform.Value.OffsetX,
                                       (int) freeCharge.RenderTransform.Value.OffsetY);
 
-            foreach (var uiElement in gridField.Children)
+            foreach (object uiElement in gridField.Children)
             {
                 if (uiElement.GetType() == typeof (NegativeCharge))
                 {
@@ -750,18 +788,18 @@ namespace ElectricField
         {
             _time++;
             var deleteList = new List<UIElement>();
-            foreach (var child in gridField.Children)
+            foreach (object child in gridField.Children)
             {
                 if (child.GetType() == typeof (FreeCharge))
                 {
-                    var fcX = ((FreeCharge) child).RenderTransform.Value.OffsetX;
-                    var fcY = ((FreeCharge) child).RenderTransform.Value.OffsetY;
-                    var moveVector = GetForceAtDesirePosition(fcX, fcY, 0);
+                    double fcX = ((FreeCharge) child).RenderTransform.Value.OffsetX;
+                    double fcY = ((FreeCharge) child).RenderTransform.Value.OffsetY;
+                    Vector moveVector = GetForceAtDesirePosition(fcX, fcY, 0);
 
-                    MoveIt(moveVector, child);
+                    MoveIt(moveVector, ((FreeCharge) child).LastVector, child);
 
-                    var nDist = NearestDistancetoNegative((FreeCharge) child);
-                    var mag = Helper.VectorMagnitude(moveVector);
+                    int nDist = NearestDistancetoNegative((FreeCharge) child);
+                    double mag = Helper.VectorMagnitude(moveVector);
                     if (Math.Abs(nDist - mag) < 40)
                     {
                         deleteList.Add((FreeCharge) child);
@@ -771,13 +809,12 @@ namespace ElectricField
                     {
                         deleteList.Add((FreeCharge) child);
                     }
-                    ((FreeCharge) child).LastVector = moveVector;
-
+                    ((FreeCharge) child).LastVector += moveVector;
                 }
             }
             if (deleteList.Count != 0)
             {
-                foreach (var uiElement in deleteList)
+                foreach (UIElement uiElement in deleteList)
                 {
                     gridField.Children.Remove(uiElement);
                 }
@@ -785,33 +822,28 @@ namespace ElectricField
             }
         }
 
-        public void MoveIt(Vector vec, object element)
+        public void MoveIt(Vector accelerationVec, Vector lastVelocityVec, object element)
         {
-            var fcX = ((FreeCharge) element).RenderTransform.Value.OffsetX;
-            var fcY = ((FreeCharge) element).RenderTransform.Value.OffsetY;
+            const double deltaTime = 0.01;
+            //F=MA
+            //amounttoMove = at + v0;
+
+
+            double fcX = ((FreeCharge) element).RenderTransform.Value.OffsetX;
+            double fcY = ((FreeCharge) element).RenderTransform.Value.OffsetY;
 
             var group = new TransformGroup();
 
             var transfer = new TranslateTransform
                                {
-                                   X = fcX + vec.X,
-                                   Y = fcY - vec.Y
+                                   X = fcX + (accelerationVec.X + lastVelocityVec.X)*deltaTime,
+                                   Y = fcY - (accelerationVec.Y*deltaTime + lastVelocityVec.Y)*deltaTime
                                };
             group.Children.Add(transfer);
 
             ((FreeCharge) element).VisitedPoints.Add(new PointStatistics(new Point(transfer.X, transfer.Y), _time, 0, 0,
                                                                          0));
             ((FreeCharge) element).RenderTransform = group;
-
-
-            //if (transfer.Y > 2*gridField.Height || transfer.Y < -gridField.Height)
-            //{
-            //    ((FreeCharge) element).Restart();
-            //}
-            //if (transfer.X > 2*gridField.Width || transfer.X < -gridField.Width)
-            //{
-            //    ((FreeCharge) element).Restart();
-            //}
         }
 
 
@@ -823,7 +855,6 @@ namespace ElectricField
                 _isTimerStarted = true;
                 MnuDeleteDummy.IsEnabled = true;
             }
-
         }
 
         private void BtnStopSimulationClik(object sender, RoutedEventArgs e)
@@ -838,12 +869,10 @@ namespace ElectricField
 
         private void WindowMotherLoaded(object sender, RoutedEventArgs e)
         {
-
             FieldOutline.Show();
             FieldOutline.Update();
             FieldMeter.Show();
             FieldMeter.Update();
-
         }
 
         private void MnuItemFieldOutlineClick(object sender, RoutedEventArgs e)
@@ -851,14 +880,14 @@ namespace ElectricField
             FieldOutline.Show();
         }
 
-        private void MainAppWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MainAppWindowClosing(object sender, CancelEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
         private void MnuChargeChargeGraphClick(object sender, RoutedEventArgs e)
         {
-            var surfacelist = gridField.Children.Cast<object>().Where(
+            List<Surface> surfacelist = gridField.Children.Cast<object>().Where(
                 uiElement => uiElement.GetType() == typeof (Surface)).Cast
                 <Surface>().ToList();
             var chdialog = new ChargeChargeGraphDialog(_charges, surfacelist);
@@ -870,5 +899,17 @@ namespace ElectricField
             FieldMeter.Show();
         }
 
+        private void BtnQuckDrawFieldLinesClick(object sender, RoutedEventArgs e)
+        {
+            List<Surface> surfacelist =
+                gridField.Children.Cast<object>().Where(uiElement => uiElement.GetType() == typeof (Surface)).Cast
+                    <Surface>().ToList();
+            var slvr = new Solver(_charges, surfacelist, (int) gridField.Height, (int) gridField.Width);
+
+            slvr.SolveIt();
+            var imagebrush = new ImageBrush();
+            imagebrush.ImageSource = slvr.GenerateFieldLines(true);
+            gridField.Background = imagebrush;
+        }
     }
 }

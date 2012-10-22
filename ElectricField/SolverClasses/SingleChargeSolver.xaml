@@ -1,4 +1,4 @@
-﻿<Window x:Class="ElectricField.SingleChargeSolver"
+﻿<Window x:Class="ElectricField.SolverClasses.SingleChargeSolver"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="SingleChargeSolver" Height="421" Width="466" Background="#FF313131" WindowStyle="ThreeDBorderWindow" ResizeMode="CanMinimize" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:ElectricField.Controls">

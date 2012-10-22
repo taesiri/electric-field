@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -13,10 +12,10 @@ namespace ElectricField.SolverClasses
     /// </summary>
     public partial class ChargeSolver
     {
-        private readonly bool _isInitialized = false;
+        private readonly List<Charge> _charges;
         private readonly int _imageHieght = 100;
         private readonly int _imageWidth = 100;
-        private readonly List<Charge> _charges;
+        private readonly bool _isInitialized;
         private readonly List<Surface> _surfaces;
 
         public ChargeSolver()
@@ -48,7 +47,6 @@ namespace ElectricField.SolverClasses
 
         private void ColorPickerSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
         {
-
             if (_isInitialized)
             {
                 var myBrush = new LinearGradientBrush();
@@ -61,7 +59,7 @@ namespace ElectricField.SolverClasses
 
         private void BtnSolveClick(object sender, RoutedEventArgs e)
         {
-            var allowMark = false;
+            bool allowMark = false;
             allowMark = chkMarker.IsChecked != null && (bool) chkMarker.IsChecked;
 
             int clampvalue = 100;
@@ -86,9 +84,9 @@ namespace ElectricField.SolverClasses
                                                                       allowMark, integerUDThreshold.Value.Value,
                                                                       colorPickerThreshold.SelectedColor);
 
-                solvedutput = new SolverOutput(outputData, colorPickerMinColor.SelectedColor,
-                                               colorPickerMaxColor.SelectedColor,
-                                               _charges);
+                //solvedutput = new SolverOutput(outputData, colorPickerMinColor.SelectedColor,
+                //                               colorPickerMaxColor.SelectedColor,
+                //                               _charges);
             }
             else
             {
@@ -97,31 +95,29 @@ namespace ElectricField.SolverClasses
                                                              allowMark, integerUDThreshold.Value.Value,
                                                              colorPickerThreshold.SelectedColor);
 
-                solvedutput = new SolverOutput(outputData, colorPickerMinColor.SelectedColor,
-                                               colorPickerMaxColor.SelectedColor,
-                                               _charges);
+                //solvedutput = new SolverOutput(outputData, colorPickerMinColor.SelectedColor,
+                //                               colorPickerMaxColor.SelectedColor,
+                //                               _charges);
             }
 
             if (allowMark)
             {
-                solvedutput.lblMarker.Visibility = Visibility.Visible;
-                solvedutput.recMarker.Visibility = Visibility.Visible;
-                solvedutput.gridMarker.Visibility = Visibility.Visible;
-                solvedutput.recMarker.Fill = new SolidColorBrush(colorPickerThreshold.SelectedColor);
-                solvedutput.lblMarker.Content = "This color is a Marker for the points which had Value : " +
-                                                integerUDThreshold.Value.Value;
-
+                //solvedutput.lblMarker.Visibility = Visibility.Visible;
+                //solvedutput.recMarker.Visibility = Visibility.Visible;
+                //solvedutput.gridMarker.Visibility = Visibility.Visible;
+                //solvedutput.recMarker.Fill = new SolidColorBrush(colorPickerThreshold.SelectedColor);
+                //solvedutput.lblMarker.Content = "This color is a Marker for the points which had Value : " +
+                //                                integerUDThreshold.Value.Value;
             }
             else
             {
-                solvedutput.lblMarker.Visibility = Visibility.Hidden;
-                solvedutput.recMarker.Visibility = Visibility.Hidden;
-                solvedutput.gridMarker.Visibility = Visibility.Hidden;
+                //solvedutput.lblMarker.Visibility = Visibility.Hidden;
+                //solvedutput.recMarker.Visibility = Visibility.Hidden;
+                //solvedutput.gridMarker.Visibility = Visibility.Hidden;
             }
 
-            solvedutput.Show();
+            //solvedutput.Show();
             Close();
-
         }
 
         private void BtnCloseClick(object sender, RoutedEventArgs e)
